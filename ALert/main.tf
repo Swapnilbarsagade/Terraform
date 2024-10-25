@@ -7,7 +7,7 @@ resource "aws_instance" "example" {
   instance_type               = "t2.medium"
   count                       = 2  # Number of instances
   key_name                    = "thunderfirstform" # Create and download key already
-  security_groups             = ["sg-0043a62a72db3f571"]  # Existing Security Group
+  vpc_security_group_ids      = ["sg-0043a62a72db3f571"]  # Existing Security Group
   associate_public_ip_address = true
 
   root_block_device {
