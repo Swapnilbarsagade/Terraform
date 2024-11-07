@@ -31,7 +31,7 @@ variable "db_instance_class" {
 variable "db_name" {
   description = "Database name"
   type        = string
-  default     = "mydatabase"
+  default     = "mydb"
 }
 
 variable "db_username" {
