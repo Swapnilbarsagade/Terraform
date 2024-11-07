@@ -13,6 +13,7 @@ resource "aws_db_instance" "oracle_db" {
   username                = var.db_username
   password                = var.db_password
   parameter_group_name    = var.db_parameter_group
+  license_model           = "license-included"  # or "bring-your-own-license"
   skip_final_snapshot     = true
   publicly_accessible     = var.publicly_accessible
   backup_retention_period = var.backup_retention_period
