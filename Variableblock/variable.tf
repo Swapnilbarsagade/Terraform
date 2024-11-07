@@ -1,6 +1,6 @@
 variable "this_image_id" {
   type        = string
-  default = "ami-09b0a86a2c84101e1"
+  default = "ami-042e76978adeb8c48"
 }
 
 variable "this_disable_api_stop" {
@@ -19,7 +19,7 @@ variable "this_count" {
 }
 variable "this_vpc_security_group_ids" {
     type = string 
-    default = "sg-0505874879e7ce6cd"
+    default = "sg-0ee8e99c42ea4a2a3"
      
 }
 
