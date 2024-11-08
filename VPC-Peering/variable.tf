@@ -1,7 +1,7 @@
 # variables.tf
 variable "profile" {
   description = "AWS CLI profile to use"
-  default     = "default"
+  default     = "swapnil"
 }
 
 variable "region" {
