@@ -160,20 +160,20 @@ resource "aws_security_group" "sg_ping_2" {
 
 # EC2 Instances in Each VPC
 resource "aws_instance" "instance_1" {
-  ami               = "ami-03d31e4041396b53c" # Amazon Linux 2 AMI
-  instance_type     = var.instance_type
-  subnet_id         = aws_subnet.subnet_1.id
-  security_group_ids = [aws_security_group.sg_ping.id]
+  ami                 = "ami-03d31e4041396b53c" # Amazon Linux 2 AMI
+  instance_type       = var.instance_type
+  subnet_id           = aws_subnet.subnet_1.id
+  vpc_security_group_ids = [aws_security_group.sg_ping.id]
   tags = {
     Name = "Server-1"
   }
 }
 
 resource "aws_instance" "instance_2" {
-  ami               = "ami-03d31e4041396b53c" # Amazon Linux 2 AMI
-  instance_type     = var.instance_type
-  subnet_id         = aws_subnet.subnet_2.id
-  security_group_ids = [aws_security_group.sg_ping_2.id]
+  ami                 = "ami-03d31e4041396b53c" # Amazon Linux 2 AMI
+  instance_type       = var.instance_type
+  subnet_id           = aws_subnet.subnet_2.id
+  vpc_security_group_ids = [aws_security_group.sg_ping_2.id]
   tags = {
     Name = "Server-2"
   }
