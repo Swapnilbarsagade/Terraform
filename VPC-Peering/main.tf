@@ -123,14 +123,14 @@ resource "aws_route" "route_vpc_peering_2" {
 resource "aws_security_group" "sg_ping" {
   vpc_id = aws_vpc.vpc_1.id
   ingress {
-    from_port   = -1
-    to_port     = -1
+    from_port   = 0
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = [aws_vpc.vpc_2.cidr_block]
   }
   egress {
-    from_port   = -1
-    to_port     = -1
+    from_port   = 0
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -142,14 +142,14 @@ resource "aws_security_group" "sg_ping" {
 resource "aws_security_group" "sg_ping_2" {
   vpc_id = aws_vpc.vpc_2.id
   ingress {
-    from_port   = -1
-    to_port     = -1
+    from_port   = 0
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = [aws_vpc.vpc_1.cidr_block]
   }
   egress {
-    from_port   = -1
-    to_port     = -1
+    from_port   = 0
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
