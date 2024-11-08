@@ -27,6 +27,7 @@ resource "aws_vpc" "vpc_2" {
 resource "aws_subnet" "subnet_1" {
   vpc_id                 = aws_vpc.vpc_1.id
   cidr_block             = var.subnet_cidr_1
+  availability_zone      = "ap-northeast-2b"  # Ensure this matches the AZ you want
   map_public_ip_on_launch = true
   tags = {
     Name = "Subnet-1"
@@ -36,6 +37,7 @@ resource "aws_subnet" "subnet_1" {
 resource "aws_subnet" "subnet_2" {
   vpc_id                 = aws_vpc.vpc_2.id
   cidr_block             = var.subnet_cidr_2
+  availability_zone      = "ap-northeast-2c"  # Ensure this matches the AZ you want
   map_public_ip_on_launch = true
   tags = {
     Name = "Subnet-2"
@@ -158,11 +160,12 @@ resource "aws_security_group" "sg_ping_2" {
   }
 }
 
+# EC2 Instances
 resource "aws_instance" "instance_1" {
   ami                    = "ami-03d31e4041396b53c" # Amazon Linux 2 AMI
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.subnet_1.id
-  availability_zone      = "ap-northeast-2b"  # Match the Availability Zone with the subnet
+  availability_zone      = "ap-northeast-2b"  # Ensure this matches the subnet's AZ
   vpc_security_group_ids = [aws_security_group.sg_ping.id]  # Corrected argument name
   tags = {
     Name = "Server-1"
@@ -173,10 +176,9 @@ resource "aws_instance" "instance_2" {
   ami                    = "ami-03d31e4041396b53c" # Amazon Linux 2 AMI
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.subnet_2.id
-  availability_zone      = "ap-northeast-2c"  # Match the Availability Zone with the subnet
+  availability_zone      = "ap-northeast-2c"  # Ensure this matches the subnet's AZ
   vpc_security_group_ids = [aws_security_group.sg_ping_2.id]  # Corrected argument name
   tags = {
     Name = "Server-2"
   }
 }
-
