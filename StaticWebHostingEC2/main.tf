@@ -56,6 +56,11 @@ resource "aws_instance" "todo_instance" {
   }
 }
 
+# Route 53 Hosted Zone (if you don’t already have it)
+data "aws_route53_zone" "selected_zone" {
+  name         = var.domain_name
+  private_zone = false
+}
 
 # Route 53 DNS Record to bind the domain to the EC2 instance's public IP
 resource "aws_route53_record" "todo_dns_record" {
