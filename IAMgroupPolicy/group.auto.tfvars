@@ -1,0 +1,1 @@
+group_name  = "S3ReadOnlyGroup" # Specify the group name
