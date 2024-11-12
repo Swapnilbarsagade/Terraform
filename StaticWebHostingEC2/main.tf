@@ -1,8 +1,3 @@
-# Provider block to configure AWS access
-provider "aws" {
-  region = var.aws_region
-}
-
 # Security Group to allow HTTP access
 resource "aws_security_group" "web_sg" {
   name        = "todo_app_sg"
