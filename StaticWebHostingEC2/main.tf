@@ -1,7 +1,7 @@
 # Security Group to allow HTTP access
-resource "aws_security_group" "web_sg" {
-  name        = "todo_app_sg"
-  description = "Allow HTTP traffic for ToDo app"
+resource "aws_security_group" "carvcilla_sg" {
+  name        = "carvcilla_app_sg"
+  description = "Allow HTTP traffic for Static app"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -20,39 +20,29 @@ resource "aws_security_group" "web_sg" {
   }
 }
 
-# EC2 Instance for the ToDo app
-resource "aws_instance" "todo_instance" {
+# EC2 Instance for the carvcilla app
+resource "aws_instance" "carvcilla_instance" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  security_groups = [aws_security_group.web_sg.name]
+  security_groups = [aws_security_group.carvcilla_sg.name]
   key_name      = var.key_name
 
   # User data script to install Nginx and set up the ToDo app
   user_data = <<-EOF
-              #!/bin/bash
-              # Update the package repository
-              sudo apt update -y
-              # Install Nginx
-              sudo apt install -y nginx
-              # Create a simple HTML ToDo app
-              echo "<html>
-              <head><title>ToDo App</title></head>
-              <body>
-              <h1>Simple ToDo App</h1>
-              <ul>
-                <li>Task 1: Buy Groceries</li>
-                <li>Task 2: Complete Assignment</li>
-                <li>Task 3: Read Book</li>
-              </ul>
-              </body>
-              </html>" > /var/www/html/index.html
-              # Start Nginx service
-              sudo systemctl start nginx
-              sudo systemctl enable nginx
-              EOF
+    #!/bin/bash
+    sudo apt install unzip -y curl
+    sudo apt install nginx -y
+    curl -O https://www.free-css.com/assets/files/free-css-templates/download/page296/oxer.zip
+    curl -O https://www.free-css.com/assets/files/free-css-templates/download/page296/carvcilla.zip
+    sudo unzip carvcilla.zip
+    sudo rm -rf /var/www/html/*
+    sudo mv carvcilla-html/* /var/www/html/
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+    EOF
 
   tags = {
-    Name = "ToDoAppInstance"
+    Name = "carvcilla"
   }
 }
 
@@ -63,10 +53,10 @@ data "aws_route53_zone" "selected_zone" {
 }
 
 # Route 53 DNS Record to bind the domain to the EC2 instance's public IP
-resource "aws_route53_record" "todo_dns_record" {
+resource "aws_route53_record" "carvcilla_dns_record" {
   zone_id = data.aws_route53_zone.selected_zone.zone_id
   name    = var.subdomain
   type    = "A"
   ttl     = 300
-  records = [aws_instance.todo_instance.public_ip]
+  records = [aws_instance.carvcilla_instance.public_ip]
 }
