@@ -32,10 +32,10 @@ resource "aws_instance" "carvcilla_instance" {
     #!/bin/bash
     sudo apt install unzip -y curl
     sudo apt install nginx -y
-    curl -O https://www.free-css.com/assets/files/free-css-templates/download/page296/carvcilla.zip
-    sudo unzip carvcilla.zip
+    curl -O https://www.free-css.com/assets/files/free-css-templates/download/page296/oxer.zip
+    sudo unzip oxer.zip
     sudo rm -rf /var/www/html/*
-    sudo mv carvcilla-html/* /var/www/html/
+    sudo mv oxer-html/* /var/www/html/
     sudo systemctl enable nginx
     sudo systemctl start nginx
     EOF
