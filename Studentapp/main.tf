@@ -44,19 +44,12 @@ resource "aws_instance" "web_server_instance" {
   user_data = <<-EOF
               #!/bin/bash
               sudo apt update -y
-              sudo apt install -y nginx mariadb-server openjdk-11-jdk
               
               # Download and install Tomcat 9
               wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.tar.gz -P /tmp
               sudo tar -xzvf /tmp/apache-tomcat-9.0.97.tar.gz -C /opt/
               sudo mv /opt/apache-tomcat-9.0.97 /opt/tomcat9
               sudo chmod +x /opt/tomcat9/bin/*.sh
-              
-              # Start Nginx and MariaDB services
-              sudo systemctl start nginx
-              sudo systemctl enable nginx
-              sudo systemctl start mariadb
-              sudo systemctl enable mariadb
               
               # Start Tomcat
               sudo /opt/tomcat9/bin/startup.sh
