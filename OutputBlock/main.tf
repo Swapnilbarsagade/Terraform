@@ -1,13 +1,13 @@
 resource "aws_instance" "this_ubuntu" {
     ami = var.this_image_id    #var.this_image_id 
-    disable_api_stop  = var.this_any.api_stop_ec2  #var.this_disable_api_stop 
-    disable_api_termination =  var.this_any.api_termination_ec2  #var.this_disable_api_termination  
+    disable_api_stop  = var.this_disable_api_stop    #var.this_any.api_stop_ec2   
+    disable_api_termination =  var.this_disable_api_termination   #var.this_any.api_termination_ec2 
     instance_type = var.this_list[0]  #var.this_any.instance_type_list[0]
-    #key_name=""
+    key_name="batmobile"
     #vpc_security_group_ids = [var.this_vpc_security_group_ids]
       depends_on = [aws_subnet.this_subnet_pub]
     subnet_id =  aws_subnet.this_subnet_pub.id
-    #count =    var.this_any.count   #var.this_count  #loop #var.this_list[1]
+    #count =  var.this_count  #loop #var.this_list[1]  var.this_any.count
     tags = {
        purpose = var.this_map.purposeec2    #var.this_any.tags_map.purposeec2
        #purpose = "webserver"
@@ -26,7 +26,7 @@ resource "aws_vpc" "this_vpc" {
 
 resource "aws_subnet" "this_subnet_pub" {
   vpc_id     = aws_vpc.this_vpc.id  #referedresourceblock'sProvider_referedresourceblock'sresourcetype.referedresourceblocksuniqueresourceblockname.attributeofresource
-  availability_zone = "ap-south-1a"
+  availability_zone = "ap-northeast-2c"
   cidr_block = var.this_subnet_pub_cidr_block      //"12.11.0.0/17"  
   map_public_ip_on_launch = var.this_subnet_pub_map_ip //true
   tags = {
