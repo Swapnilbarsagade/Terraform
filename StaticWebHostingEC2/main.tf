@@ -1,7 +1,7 @@
 # Security Group to allow HTTP access
-resource "aws_security_group" "carvcilla_sg" {
-  name        = "carvcilla_app_sg"
-  description = "Allow HTTP traffic for Static app"
+resource "aws_security_group" "boxer_sg" {
+  name        = "boxer_app_sg"
+  description = "Allow HTTP traffic for Static boxer app"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -20,14 +20,14 @@ resource "aws_security_group" "carvcilla_sg" {
   }
 }
 
-# EC2 Instance for the carvcilla app
-resource "aws_instance" "carvcilla_instance" {
+# EC2 Instance for the boxer app
+resource "aws_instance" "boxer_instance" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  security_groups = [aws_security_group.carvcilla_sg.name]
+  security_groups = [aws_security_group.boxer_sg.name]
   key_name      = var.key_name
 
-  # User data script to install Nginx and set up the ToDo app
+  # User data script to install Nginx and set up the boxer app
   user_data = <<-EOF
     #!/bin/bash
     sudo apt install unzip -y curl
@@ -41,7 +41,7 @@ resource "aws_instance" "carvcilla_instance" {
     EOF
 
   tags = {
-    Name = "carvcilla"
+    Name = "boxer"
   }
 }
 
@@ -52,10 +52,10 @@ data "aws_route53_zone" "selected_zone" {
 }
 
 # Route 53 DNS Record to bind the domain to the EC2 instance's public IP
-resource "aws_route53_record" "carvcilla_dns_record" {
+resource "aws_route53_record" "boxer_dns_record" {
   zone_id = data.aws_route53_zone.selected_zone.zone_id
   name    = var.subdomain
   type    = "A"
   ttl     = 300
-  records = [aws_instance.carvcilla_instance.public_ip]
+  records = [aws_instance.boxer_instance.public_ip]
 }
