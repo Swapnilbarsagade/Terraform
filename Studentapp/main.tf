@@ -1,6 +1,6 @@
 # Security Group for EC2 Instance (Tomcat Web Server)
 resource "aws_security_group" "web_server" {
-  vpc_id = aws_vpc.main_vpc.id
+  #vpc_id = aws_vpc.main_vpc.id
 
   ingress {
     from_port   = 80
