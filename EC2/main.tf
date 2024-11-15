@@ -61,7 +61,7 @@ resource "aws_instance" "web" {
   associate_public_ip_address = var.associate_public_ip_address
   count                       = var.instance_count
   vpc_security_group_ids = var.security_group_ids
-  availability_zone      = var.availability_zone
+  #availability_zone      = var.availability_zone
   root_block_device {
     volume_size = var.this_aws_instance_volume_size
   }
