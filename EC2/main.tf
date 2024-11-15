@@ -29,7 +29,7 @@ resource "aws_security_group" "this_student_sg" {
   }
 
   ingress {
-    description      = "Allow SSH access"
+    description      = "Allow tomcat port access"
     from_port        = 8080
     to_port          = 8080
     protocol         = "tcp"
