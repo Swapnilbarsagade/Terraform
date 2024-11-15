@@ -7,7 +7,7 @@ variable "vpc_id" {
 variable "subnet_ids" {
   description = "List of subnet IDs for the ALB"
   type        = list(string)
-  subnet_ids = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet-0a7d16e970a6d7b9f", "subnet-0c695957469386d8e"]
+  default = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet-0a7d16e970a6d7b9f", "subnet-0c695957469386d8e"]
 }
 
 # EC2 variables for studentapp: ---
