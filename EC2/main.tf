@@ -92,7 +92,10 @@ resource "aws_instance" "web" {
               git clone https://github.com/Swapnilbarsagade/AWS.git /tmp/aws
 
               # Copy the student.war file to the Tomcat webapps directory
-              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
+              #cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
+              # Copy the student.war file to the Tomcat webapps directory as ROOT.war
+              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/ROOT.war
+
 
               # Start Tomcat using catalina.sh
               /opt/tomcat/bin/catalina.sh stop
@@ -112,6 +115,7 @@ data "aws_route53_zone" "selected_zone" {
 }
 
 # Route 53 DNS Record to bind the domain to the EC2 instance's public IP
+
 resource "aws_route53_record" "student_dns_record" {
   zone_id = data.aws_route53_zone.selected_zone.zone_id
   name    = var.subdomain
@@ -169,24 +173,20 @@ resource "aws_lb" "student_app_alb" {
 
 resource "aws_lb_listener" "https_listener" {
   load_balancer_arn = aws_lb.student_app_alb.arn
-  port              = "443"
+  port              = 443
   protocol          = "HTTPS"
-  certificate_arn = aws_acm_certificate.student_certificate.arn
-
+  certificate_arn   = aws_acm_certificate.student_certificate.arn
 
   default_action {
-    type             = "fixed-response"
-    fixed_response {
-      status_code = 200
-      content_type = "text/plain"
-      message_body = "HTTPS listener"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.https_target_group.arn
   }
 }
 
+
 resource "aws_lb_target_group" "https_target_group" {
   name     = "student-app-https-target-group"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
