@@ -67,7 +67,7 @@ resource "aws_instance" "web" {
   }
 
   user_data = <<-EOF
-               #!/bin/bash
+              #!/bin/bash
               # Update the system
               apt-get update -y
 
@@ -78,17 +78,20 @@ resource "aws_instance" "web" {
               echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/profile.d/java.sh
               source /etc/profile.d/java.sh
 
-              # Download and install Tomcat
-              cd /tmp
-              curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.tar.gz
-              tar -xvf apache-tomcat-9.0.97.tar.gz
-              sudo mv apache-tomcat-9.0.97 /opt/tomcat
+              # Download and install Tomcat 9.0.97
+              TOMCAT_VERSION="9.0.97"
+              wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
+              tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C /opt
+
+              # Create a symbolic link to make Tomcat accessible
+              ln -s /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat
 
               # Set permissions
               chown -R root:root /opt/tomcat
 
-              # Start Tomcat
-              /opt/tomcat/bin/startup.sh
+              # Start Tomcat using catalina.sh
+              /opt/tomcat/bin/catalina.sh start
+
               EOF
 
   tags = {
