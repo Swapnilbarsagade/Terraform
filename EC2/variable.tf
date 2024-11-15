@@ -37,12 +37,6 @@ variable "instance_count" {
   default     = 1
 }
 
-variable "security_group_ids" {
-  description = "List of security group IDs"
-  type        = list(string)
-  
-}
-
 variable "availability_zone" {
   description = "Availability zone to launch the instance"
   type        = string
