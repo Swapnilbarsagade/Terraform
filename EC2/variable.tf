@@ -40,7 +40,7 @@ variable "instance_count" {
 variable "security_group_ids" {
   description = "List of security group IDs"
   type        = list(string)
-  default     = [aws_security_group.this_student_sg.id]  # Replace with actual IDs
+  
 }
 
 variable "availability_zone" {
