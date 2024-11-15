@@ -171,10 +171,8 @@ resource "aws_lb_listener" "https_listener" {
   load_balancer_arn = aws_lb.student_app_alb.arn
   port              = "443"
   protocol          = "HTTPS"
+  certificate_arn = aws_acm_certificate.student_certificate.arn
 
-  ssl_certificate {
-    certificate_arn = aws_acm_certificate.student_certificate.arn
-  }
 
   default_action {
     type             = "fixed-response"
