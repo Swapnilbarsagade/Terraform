@@ -138,19 +138,6 @@ resource "aws_lb_listener" "http_listener" {
   }
 }
 
-# Listener for ALB (HTTPS - Optional)
-# Uncomment and configure if using HTTPS with ACM certificate
-# resource "aws_lb_listener" "https_listener" {
-#   load_balancer_arn = aws_lb.boxer_alb.arn
-#   port              = 443
-#   protocol          = "HTTPS"
-#   certificate_arn   = var.certificate_arn  # Replace with ACM certificate ARN
-
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.boxer_target_group.arn
-#   }
-# }
 
 # Attach EC2 Instance to Target Group
 resource "aws_lb_target_group_attachment" "boxer_tg_attachment" {
