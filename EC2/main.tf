@@ -66,6 +66,20 @@ resource "aws_instance" "web" {
     volume_size = var.this_aws_instance_volume_size
   }
 
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt update -y
+
+              # Download and install Tomcat
+              cd /tmp
+              curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.tar.gz
+              tar -xvf apache-tomcat-9.0.97.tar.gz
+              sudo mv apache-tomcat-9.0.97 /opt/tomcat
+
+              # Start Tomcat
+              sudo bash /opt/tomcat/bin/start.sh
+    EOF
+
   tags = {
     Name = "StudentApp"
   }
