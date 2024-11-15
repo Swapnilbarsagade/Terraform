@@ -88,7 +88,14 @@ resource "aws_instance" "web" {
               # Set permissions
               chown -R root:root /opt/tomcat
 
+              # Clone the Git repository that contains the student.war file
+              git clone https://github.com/Swapnilbarsagade/AWS.git /tmp/aws
+
+              # Copy the student.war file to the Tomcat webapps directory
+              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
+
               # Start Tomcat using catalina.sh
+              /opt/tomcat/bin/catalina.sh stop
               /opt/tomcat/bin/catalina.sh start
 
               EOF
