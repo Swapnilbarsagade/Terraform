@@ -1,6 +1,7 @@
 variable "vpc_id" {
   description = "VPC ID where the security group will be created"
   type        = string
+  default     = "vpc-03276f1b3bce97eec"
 }
 
 
@@ -9,7 +10,7 @@ variable "vpc_id" {
 variable "this_ami" {
   description = "Type of the instance to launch"
   type        = string
-  default     = "t3.micro"
+  default     = "ami-042e76978adeb8c48"
 }
 
 variable "instance_type" {
