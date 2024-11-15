@@ -79,12 +79,11 @@ resource "aws_instance" "web" {
               source /etc/profile.d/java.sh
 
               # Download and install Tomcat 9.0.97
-              TOMCAT_VERSION="9.0.97"
-              wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
-              tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C /opt
+              wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.tar.gz
+              tar xzvf apache-tomcat-9.0.97.tar.gz -C /opt
 
               # Create a symbolic link to make Tomcat accessible
-              ln -s /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat
+              ln -s /opt/apache-tomcat-9.0.97 /opt/tomcat
 
               # Set permissions
               chown -R root:root /opt/tomcat
