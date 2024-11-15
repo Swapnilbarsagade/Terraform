@@ -92,9 +92,9 @@ resource "aws_instance" "web" {
               git clone https://github.com/Swapnilbarsagade/AWS.git /tmp/aws
 
               # Copy the student.war file to the Tomcat webapps directory
-              #cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
+              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
               # Copy the student.war file to the Tomcat webapps directory as ROOT.war
-              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/ROOT.war
+              #cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/ROOT.war
 
 
               # Start Tomcat using catalina.sh
