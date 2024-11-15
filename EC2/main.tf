@@ -67,8 +67,16 @@ resource "aws_instance" "web" {
   }
 
   user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update -y
+               #!/bin/bash
+              # Update the system
+              apt-get update -y
+
+              # Install Java (required for Tomcat)
+              apt-get install -y openjdk-11-jdk
+
+              # Set JAVA_HOME
+              echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/profile.d/java.sh
+              source /etc/profile.d/java.sh
 
               # Download and install Tomcat
               cd /tmp
@@ -76,9 +84,12 @@ resource "aws_instance" "web" {
               tar -xvf apache-tomcat-9.0.97.tar.gz
               sudo mv apache-tomcat-9.0.97 /opt/tomcat
 
+              # Set permissions
+              chown -R root:root /opt/tomcat
+
               # Start Tomcat
-              sudo bash /opt/tomcat/bin/start.sh
-    EOF
+              /opt/tomcat/bin/startup.sh
+              EOF
 
   tags = {
     Name = "StudentApp"
