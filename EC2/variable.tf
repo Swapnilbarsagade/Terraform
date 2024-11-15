@@ -52,6 +52,7 @@ variable "this_aws_instance_volume_size" {
 variable "domain_name" {
   description = "The domain name registered in Route 53"
   type        = string
+  default     = "swapnilbdevops.online"
 }
 
 variable "subdomain" {
