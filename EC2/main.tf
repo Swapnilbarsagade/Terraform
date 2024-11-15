@@ -136,12 +136,17 @@ resource "aws_acm_certificate" "student_certificate" {
 
 # Add DNS validation (if you use Route 53 for your domain)
 resource "aws_route53_record" "student_certificate_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.student_certificate.domain_validation_options : dvo.domain_name => dvo
+  }
+
   zone_id = data.aws_route53_zone.selected_zone.zone_id
-  name    = "_acme-challenge.${var.domain_name}"
-  type    = "CNAME"
+  name    = each.value.resource_record_name
+  type    = each.value.resource_record_type
   ttl     = 60
-  records = [aws_acm_certificate.student_certificate.domain_validation_options[0].resource_record_value]
+  records = [each.value.resource_record_value]
 }
+
 
 
 #Application load balancer
