@@ -40,7 +40,7 @@ resource "aws_security_group" "boxer_sg" {
 resource "aws_instance" "boxer_instance" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  security_groups = [aws_security_group.boxer_sg.id]
+  security_groups = [aws_security_group.boxer_sg.name]
   key_name      = var.key_name
 
   # User data script to install Nginx and set up the boxer app
