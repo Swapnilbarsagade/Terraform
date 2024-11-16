@@ -152,8 +152,68 @@ resource "aws_lb_listener" "http_listener" {
   }
 }
 
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_lb.student_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+  certificate_arn = aws_acm_certificate.boxer_certificate.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.student_target_group.arn
+  }
+}
+
 resource "aws_lb_target_group_attachment" "student_app_attachment" {
   target_group_arn = aws_lb_target_group.student_target_group.arn
   target_id        = aws_instance.web.id
   port             = 8080
+}
+
+
+# Route 53 Hosted Zone (if you don’t already have it)
+data "aws_route53_zone" "selected_zone" {
+  name         = var.domain_name
+  private_zone = false
+}
+
+
+
+# ACM Certificate for the Domain
+resource "aws_acm_certificate" "boxer_certificate" {
+  domain_name       = "${var.subdomain}.${var.domain_name}"
+  validation_method = "DNS"
+
+  tags = {
+    Name = "boxer-certificate"
+  }
+}
+
+# Route 53 DNS Validation Record for ACM
+resource "aws_route53_record" "acm_validation_record" {
+  for_each = { for d in aws_acm_certificate.boxer_certificate.domain_validation_options : d.domain_name => d }
+  name     = each.value.resource_record_name
+  type     = each.value.resource_record_type
+  zone_id  = data.aws_route53_zone.selected_zone.zone_id
+  records  = [each.value.resource_record_value]
+  ttl      = 300
+}
+
+# Validate the ACM Certificate
+resource "aws_acm_certificate_validation" "boxer_certificate_validation" {
+  certificate_arn         = aws_acm_certificate.boxer_certificate.arn
+  validation_record_fqdns = [for record in aws_route53_record.acm_validation_record : record.fqdn]
+}
+
+
+
+# Update the Route 53 Record to Support HTTPS
+resource "aws_route53_record" "boxer_dns_record" {
+  zone_id = data.aws_route53_zone.selected_zone.zone_id
+  name    = var.subdomain
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_lb.boxer_alb.dns_name]
 }
