@@ -208,19 +208,3 @@ resource "aws_route53_record" "boxer_dns_record" {
   ttl     = 300
   records = [aws_lb.boxer_alb.dns_name]
 }
-
-resource "aws_lb_listener" "http_redirect_listener" {
-  load_balancer_arn = aws_lb.boxer_alb.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
