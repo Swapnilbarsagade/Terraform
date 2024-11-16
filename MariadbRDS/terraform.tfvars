@@ -1,0 +1,16 @@
+# RDS Variables
+db_identifier              = "my-rds-instance"
+db_engine                  = "mysql"
+db_engine_version          = "8.0"
+db_instance_class          = "db.t3.micro"
+allocated_storage          = 20
+db_username                = "admin"
+db_password                = "admin123"
+db_name                    = "studentdb"
+skip_final_snapshot        = true
+multi_az                   = false
+storage_type               = "gp2"
+publicly_accessible        = false
+final_snapshot_identifier  = "my-rds-instance-final-snapshot"
+vpc_security_group_ids     = ["sg-0a1b2c3d4e5f6g7h"]
+db_subnet_group_name       = "studentapp-db-subnet"
