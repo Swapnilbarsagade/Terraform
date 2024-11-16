@@ -156,7 +156,7 @@ data "aws_route53_zone" "selected_zone" {
 
 # ACM Certificate for the Domain
 resource "aws_acm_certificate" "boxer_certificate" {
-  domain_name       = "${var.subdomain}.${var.domain_name}"
+  domain_name       = var.subdomain
   validation_method = "DNS"
 
   tags = {
