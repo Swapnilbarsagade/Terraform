@@ -126,18 +126,36 @@ resource "aws_lb_target_group" "boxer_target_group" {
   }
 }
 
-# Listener for ALB (HTTP)
+# HTTP Listener (with HTTP to HTTPS Redirect)
 resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = aws_lb.boxer_alb.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+# HTTPS Listener for ALB
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_lb.boxer_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  ssl_policy = "ELBSecurityPolicy-2016-08" # AWS-recommended SSL policy
+  certificate_arn = aws_acm_certificate.boxer_certificate.arn
+
+  default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.boxer_target_group.arn
   }
 }
-
 
 # Attach EC2 Instance to Target Group
 resource "aws_lb_target_group_attachment" "boxer_tg_attachment" {
@@ -180,20 +198,7 @@ resource "aws_acm_certificate_validation" "boxer_certificate_validation" {
   validation_record_fqdns = [for record in aws_route53_record.acm_validation_record : record.fqdn]
 }
 
-# HTTPS Listener for ALB
-resource "aws_lb_listener" "https_listener" {
-  load_balancer_arn = aws_lb.boxer_alb.arn
-  port              = 443
-  protocol          = "HTTPS"
 
-  ssl_policy = "ELBSecurityPolicy-2016-08" # AWS-recommended SSL policy
-  certificate_arn = aws_acm_certificate.boxer_certificate.arn
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.boxer_target_group.arn
-  }
-}
 
 # Update the Route 53 Record to Support HTTPS
 resource "aws_route53_record" "boxer_dns_record" {
