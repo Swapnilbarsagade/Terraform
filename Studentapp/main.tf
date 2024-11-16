@@ -210,10 +210,10 @@ resource "aws_acm_certificate_validation" "boxer_certificate_validation" {
 
 
 # Update the Route 53 Record to Support HTTPS
-resource "aws_route53_record" "boxer_dns_record" {
+resource "aws_route53_record" "student_dns_record" {
   zone_id = data.aws_route53_zone.selected_zone.zone_id
   name    = var.subdomain
   type    = "CNAME"
   ttl     = 300
-  records = [aws_lb.boxer_alb.dns_name]
+  records = [aws_lb.student_alb.dns_name]
 }
