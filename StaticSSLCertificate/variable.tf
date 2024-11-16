@@ -30,21 +30,8 @@ variable "subdomain" {
   default     = "boxer"  # Example subdomain (e.g., 'todo.example.com')
 }
 
-
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
-  default     = "vpc-03276f1b3bce97eec"
-}
-
 variable "subnet_ids" {
   description = "List of subnet IDs"
   type        = list(string)
   default = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet-0a7d16e970a6d7b9f", "subnet-0c695957469386d8e"]
-}
-
-variable "certificate_arn" {
-  description = "ACM certificate ARN for HTTPS (optional)"
-  type        = string
-  default     = ""
 }
