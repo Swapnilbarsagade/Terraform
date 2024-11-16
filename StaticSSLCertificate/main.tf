@@ -187,7 +187,7 @@ resource "aws_lb_listener" "https_listener" {
   protocol          = "HTTPS"
 
   ssl_policy = "ELBSecurityPolicy-2016-08" # AWS-recommended SSL policy
-  certificate_arn = aws_acm_certificate.boxer_certificate_validation.certificate_arn
+  certificate_arn = aws_acm_certificate.boxer_certificate.arn
 
   default_action {
     type             = "forward"
