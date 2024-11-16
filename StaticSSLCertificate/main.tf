@@ -138,23 +138,6 @@ resource "aws_lb_listener" "http_listener" {
   }
 }
 
-resource "aws_lb_listener" "https_listener" {
-  load_balancer_arn = aws_lb.boxer_alb.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.boxer_certificate.arn
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.boxer_target_group.arn
-  }
-
-  depends_on = [aws_acm_certificate_validation.boxer_certificate_validation]
-}
-
-
-
 
 # Attach EC2 Instance to Target Group
 resource "aws_lb_target_group_attachment" "boxer_tg_attachment" {
@@ -163,32 +146,84 @@ resource "aws_lb_target_group_attachment" "boxer_tg_attachment" {
   port             = 80
 }
 
+# Route 53 Hosted Zone (if you don’t already have it)
+data "aws_route53_zone" "selected_zone" {
+  name         = var.domain_name
+  private_zone = false
+}
+
+# Route 53 DNS Record to bind the domain to the EC2 instance's public IP
+resource "aws_route53_record" "boxer_dns_record" {
+  zone_id = data.aws_route53_zone.selected_zone.zone_id
+  name    = var.subdomain
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_lb.boxer_alb.dns_name]
+}
 
 
-# ACM Certificate
+# ACM Certificate for the Domain
 resource "aws_acm_certificate" "boxer_certificate" {
-  domain_name       = "swapnilbdevops.online"
+  domain_name       = "${var.subdomain}.${var.domain_name}"
   validation_method = "DNS"
 
   tags = {
-    Name = "boxer-ssl-certificate"
+    Name = "boxer-certificate"
   }
 }
 
-# DNS Validation Records
-resource "aws_route53_record" "boxer_acm_validation" {
-  for_each = { for dvo in aws_acm_certificate.boxer_certificate.domain_validation_options : dvo.domain_name => dvo }
-
-  zone_id = var.route53_zone_id
-  name    = each.value.resource_record_name
-  type    = each.value.resource_record_type
-  records = [each.value.resource_record_value]
-  ttl     = 60
+# Route 53 DNS Validation Record for ACM
+resource "aws_route53_record" "acm_validation_record" {
+  for_each = { for d in aws_acm_certificate.boxer_certificate.domain_validation_options : d.domain_name => d }
+  name     = each.value.resource_record_name
+  type     = each.value.resource_record_type
+  zone_id  = data.aws_route53_zone.selected_zone.zone_id
+  records  = [each.value.resource_record_value]
+  ttl      = 300
 }
-
 
 # Validate the ACM Certificate
 resource "aws_acm_certificate_validation" "boxer_certificate_validation" {
   certificate_arn         = aws_acm_certificate.boxer_certificate.arn
-  validation_record_fqdns = [for dvo in aws_acm_certificate.boxer_certificate.domain_validation_options : aws_route53_record.boxer_acm_validation[dvo.domain_name].fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.acm_validation_record : record.fqdn]
+}
+
+# HTTPS Listener for ALB
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_lb.boxer_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  ssl_policy = "ELBSecurityPolicy-2016-08" # AWS-recommended SSL policy
+  certificate_arn = aws_acm_certificate.boxer_certificate_validation.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.boxer_target_group.arn
+  }
+}
+
+# Update the Route 53 Record to Support HTTPS
+resource "aws_route53_record" "boxer_dns_record" {
+  zone_id = data.aws_route53_zone.selected_zone.zone_id
+  name    = var.subdomain
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_lb.boxer_alb.dns_name]
+}
+
+resource "aws_lb_listener" "http_redirect_listener" {
+  load_balancer_arn = aws_lb.boxer_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
 }
