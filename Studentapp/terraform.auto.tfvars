@@ -6,17 +6,5 @@ subnet_ids    = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet
 domain_name   = "swapnilbdevops.online"            # Replace with your domain name
 subdomain     = "student"                   # Subdomain to bind (e.g., 'todo.example.com')
 
-# VPC Variables
-vpc_id      = "vpc-03276f1b3bce97eec"
-subnet_ids  = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e"]
-
-# EC2 Variables
-this_ami                   = "ami-042e76978adeb8c48"
-instance_type              = "t2.micro"
-key_name                   = "batmobile"
-associate_public_ip_address = true
-instance_count             = 1
-availability_zone          = "us-east-1a"
-this_aws_instance_volume_size = 10
 
 
