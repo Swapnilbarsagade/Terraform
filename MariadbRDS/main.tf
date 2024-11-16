@@ -50,7 +50,7 @@ resource "aws_db_instance" "studentdb" {
 
   skip_final_snapshot = var.skip_final_snapshot     # Set to false if you want a final snapshot before deletion
 
-  vpc_security_group_ids = var.vpc_security_group_ids
+  vpc_security_group_ids = [aws_security_group.rds_sg.name]
   db_subnet_group_name   = var.db_subnet_group_name
 
   multi_az            = var.multi_az    # Set to true for multi-AZ deployments
