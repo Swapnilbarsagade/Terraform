@@ -35,3 +35,8 @@ variable "subnet_ids" {
   type        = list(string)
   default = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet-0a7d16e970a6d7b9f", "subnet-0c695957469386d8e"]
 }
+
+variable "route53_zone_id" {
+  description = "Route53 Hosted Zone ID for the domain swapnilbdevops.online"
+  type        = string
+}
