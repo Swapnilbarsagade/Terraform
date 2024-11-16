@@ -10,7 +10,7 @@ variable "subnet_ids" {
   default = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet-0a7d16e970a6d7b9f", "subnet-0c695957469386d8e"]
 }
 
-# EC2 variables for studentapp: ---
+# EC2 variables for studentapp: 
 
 variable "this_ami" {
   description = "Type of the instance to launch"
