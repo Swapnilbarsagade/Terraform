@@ -40,7 +40,7 @@ resource "aws_security_group" "boxer_sg" {
 resource "aws_instance" "boxer_instance" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  security_groups = [aws_security_group.boxer_sg.name]
+  security_groups = [aws_security_group.boxer_sg.id]
   key_name      = var.key_name
 
   # User data script to install Nginx and set up the boxer app
@@ -138,7 +138,6 @@ resource "aws_lb_listener" "http_listener" {
   }
 }
 
-# Listener for ALB (HTTPS)
 resource "aws_lb_listener" "https_listener" {
   load_balancer_arn = aws_lb.boxer_alb.arn
   port              = 443
@@ -150,7 +149,10 @@ resource "aws_lb_listener" "https_listener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.boxer_target_group.arn
   }
+
+  depends_on = [aws_acm_certificate_validation.boxer_certificate_validation]
 }
+
 
 
 
