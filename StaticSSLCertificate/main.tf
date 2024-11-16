@@ -152,14 +152,6 @@ data "aws_route53_zone" "selected_zone" {
   private_zone = false
 }
 
-# Route 53 DNS Record to bind the domain to the EC2 instance's public IP
-resource "aws_route53_record" "boxer_dns_record" {
-  zone_id = data.aws_route53_zone.selected_zone.zone_id
-  name    = var.subdomain
-  type    = "CNAME"
-  ttl     = 300
-  records = [aws_lb.boxer_alb.dns_name]
-}
 
 
 # ACM Certificate for the Domain
