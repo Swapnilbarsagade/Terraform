@@ -39,4 +39,5 @@ variable "subnet_ids" {
 variable "route53_zone_id" {
   description = "Route53 Hosted Zone ID for the domain swapnilbdevops.online"
   type        = string
+  default     = "Z0162679258RBO0WUFXCK"
 }

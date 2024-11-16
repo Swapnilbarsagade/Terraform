@@ -144,7 +144,7 @@ resource "aws_lb_listener" "https_listener" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.boxer_certificate_validation.certificate_arn
+  certificate_arn   = aws_acm_certificate.boxer_certificate.arn
 
   default_action {
     type             = "forward"
@@ -153,12 +153,14 @@ resource "aws_lb_listener" "https_listener" {
 }
 
 
+
 # Attach EC2 Instance to Target Group
 resource "aws_lb_target_group_attachment" "boxer_tg_attachment" {
   target_group_arn = aws_lb_target_group.boxer_target_group.arn
   target_id        = aws_instance.boxer_instance.id
   port             = 80
 }
+
 
 
 # ACM Certificate
@@ -171,17 +173,20 @@ resource "aws_acm_certificate" "boxer_certificate" {
   }
 }
 
-# Route53 Validation Record
+# DNS Validation Records
 resource "aws_route53_record" "boxer_acm_validation" {
-  zone_id = var.route53_zone_id # Replace with your Route53 Hosted Zone ID
-  name    = aws_acm_certificate.boxer_certificate.domain_validation_options[0].resource_record_name
-  type    = aws_acm_certificate.boxer_certificate.domain_validation_options[0].resource_record_type
-  records = [aws_acm_certificate.boxer_certificate.domain_validation_options[0].resource_record_value]
+  for_each = { for dvo in aws_acm_certificate.boxer_certificate.domain_validation_options : dvo.domain_name => dvo }
+
+  zone_id = var.route53_zone_id
+  name    = each.value.resource_record_name
+  type    = each.value.resource_record_type
+  records = [each.value.resource_record_value]
   ttl     = 60
 }
+
 
 # Validate the ACM Certificate
 resource "aws_acm_certificate_validation" "boxer_certificate_validation" {
   certificate_arn         = aws_acm_certificate.boxer_certificate.arn
-  validation_record_fqdns = [aws_route53_record.boxer_acm_validation.fqdn]
+  validation_record_fqdns = [for dvo in aws_acm_certificate.boxer_certificate.domain_validation_options : aws_route53_record.boxer_acm_validation[dvo.domain_name].fqdn]
 }
