@@ -12,6 +12,5 @@ multi_az                   = false
 storage_type               = "gp2"
 publicly_accessible        = false
 final_snapshot_identifier  = "my-rds-instance-final-snapshot"
-db_subnet_group_name       = "studentapp-db-subnet"
 subnet_ids                 = ["subnet-07d50e514206d0408", "subnet-0cb026ebf3a0bf22e", "subnet-0a7d16e970a6d7b9f", "subnet-0c695957469386d8e"]
 vpc_id                     = "vpc-03276f1b3bce97eec"
