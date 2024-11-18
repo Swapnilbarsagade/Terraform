@@ -3,26 +3,26 @@ resource "aws_vpc" "main_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "main-vpc"
+    Name = var.vpc_name
   }
 }
 
-# Create an Internet Gateway
+# Internet Gateway
 resource "aws_internet_gateway" "main_igw" {
   vpc_id = aws_vpc.main_vpc.id
   tags = {
-    Name = "main-igw"
+    Name = var.igw_name
   }
 }
 
 # Public Subnet
 resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.public_subnet_cidr
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = true
-  availability_zone = "ap-northeast-2a"  # Choose your availability zone
+  availability_zone       = var.availability_zone
   tags = {
-    Name = "public-subnet"
+    Name = var.public_subnet_name
   }
 }
 
@@ -30,13 +30,13 @@ resource "aws_subnet" "public_subnet" {
 resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = var.private_subnet_cidr
-  availability_zone = "ap-northeast-2a"  # Choose your availability zone
+  availability_zone = var.availability_zone
   tags = {
-    Name = "private-subnet"
+    Name = var.private_subnet_name
   }
 }
 
-# Route Table for Public Subnet
+# Public Route Table
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main_vpc.id
   route {
@@ -44,7 +44,7 @@ resource "aws_route_table" "public_rt" {
     gateway_id = aws_internet_gateway.main_igw.id
   }
   tags = {
-    Name = "public-rt"
+    Name = var.public_rt_name
   }
 }
 
@@ -54,10 +54,10 @@ resource "aws_route_table_association" "public_rt_association" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-# Route Table for Private Subnet
+# Private Route Table
 resource "aws_route_table" "private_rt" {
   vpc_id = aws_vpc.main_vpc.id
   tags = {
-    Name = "private-rt"
+    Name = var.private_rt_name
   }
 }
