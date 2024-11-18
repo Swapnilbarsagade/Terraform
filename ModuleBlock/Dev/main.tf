@@ -11,3 +11,14 @@ module "vpc" {
   public_rt_name       = "public-rt"
   private_rt_name      = "private-rt"
 }
+
+module "ec2" {
+  source          = "./modules/ec2"
+  vpc_id          = module.vpc.vpc_id
+  subnet_id       = module.vpc.public_subnet_id
+  ami_id          = "ami-12345678" # Replace with a valid AMI ID
+  instance_type   = "t2.micro"
+  instance_name   = "web-server"
+  sg_name         = "web-server-sg"
+  allowed_ssh_cidrs = ["203.0.113.0/24"] # Restrict to your IP range
+}
