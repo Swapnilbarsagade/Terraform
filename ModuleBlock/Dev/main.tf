@@ -16,7 +16,7 @@ module "ec2" {
   source          = "/home/cloudshell-user/Terraform/ModuleBlock/Resources/EC2"
   vpc_id          = module.vpc.vpc_id
   subnet_id       = module.vpc.public_subnet_id
-  ami_id          = "ami-12345678" # Replace with a valid AMI ID
+  ami_id          = "ami-0de20b1c8590e09c5" # Replace with a valid AMI ID
   instance_type   = "t2.micro"
   instance_name   = "web-server"
   sg_name         = "web-server-sg"
