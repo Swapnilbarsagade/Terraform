@@ -35,7 +35,7 @@ resource "aws_instance" "ubuntu_instance" {
   ami           = var.ubuntu_ami_id
   instance_type = var.instance_type
   subnet_id     = var.public_subnet_ids[0]
-  security_groups = [
+  vpc_security_group_ids = [
     aws_security_group.ec2_sg.id
   ]
 
