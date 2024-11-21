@@ -73,7 +73,7 @@ module "ec2" {
 }
 
 module "rds" {
-  source              = "./rds"
+  source              = "/home/cloudshell-user/Terraform/StudentFull/Resources/RDS"
   project_name        = "studentdb"
   vpc_id              = module.vpc.vpc_id
   private_subnets     = module.vpc.private_subnets
