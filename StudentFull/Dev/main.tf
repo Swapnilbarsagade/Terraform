@@ -32,11 +32,44 @@ module "vpc" {
 module "ec2" {
   source = "/home/cloudshell-user/Terraform/StudentFull/Resources/EC2"
 
-  project_name     = "my-project"
+  project_name     = "studentapp"
   vpc_id           = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnets
   ubuntu_ami_id    = "ami-042e76978adeb8c48" #  AMI ID for Ubuntu
   instance_type    = "t2.micro"
+
+  user_data = <<-EOF
+              #!/bin/bash
+              apt-get update -y
+              apt-get install -y openjdk-11-jdk mariadb-client
+
+              # Set JAVA_HOME
+              echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/profile.d/java.sh
+              source /etc/profile.d/java.sh
+
+              # Install Tomcat
+              wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.tar.gz
+              tar xzvf apache-tomcat-9.0.97.tar.gz -C /opt
+              ln -s /opt/apache-tomcat-9.0.97 /opt/tomcat
+              chown -R root:root /opt/tomcat
+
+              # Clone and deploy application
+              git clone https://github.com/Swapnilbarsagade/AWS.git /tmp/aws
+              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
+              cp /tmp/aws/tomcat9sstudent/mysql-connector.jar /opt/tomcat/lib/
+
+              # Configure database connection
+              cat <<EOL > /opt/tomcat/conf/context.xml
+              <Context>
+                  <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+                            maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+                            username="${module.rds.db_username}" password="${module.rds.db_password}" driverClassName="com.mysql.jdbc.Driver"
+                            url="jdbc:mysql://${module.rds.db_endpoint}:${module.rds.db_port}/${module.rds.db_name}"/>
+              </Context>
+              EOL
+
+              /opt/tomcat/bin/startup.sh
+              EOF
 }
 
 module "rds" {
