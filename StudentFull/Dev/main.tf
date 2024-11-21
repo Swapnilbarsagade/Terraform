@@ -39,10 +39,10 @@ module "ec2" {
   instance_type    = "t2.micro"
 }
 
-module "route53" {
-  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
-
-  domain_name   = "swapnilbdevops.online"
-  alb_dns_name  = module.ec2.alb_dns_name
-  alb_zone_id   = module.ec2.alb_zone_id
-}
+//module "route53" {
+//  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
+//
+//  domain_name   = "swapnilbdevops.online"
+//  alb_dns_name  = module.ec2.alb_dns_name
+//  alb_zone_id   = module.ec2.alb_zone_id
+//}
