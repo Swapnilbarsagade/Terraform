@@ -39,6 +39,22 @@ module "ec2" {
   instance_type    = "t2.micro"
 }
 
+module "rds" {
+  source              = "./rds"
+  project_name        = "studentdb"
+  vpc_id              = module.vpc.vpc_id
+  private_subnets     = module.vpc.private_subnets
+  allowed_cidr_blocks = ["10.0.0.0/16"] # Adjust as per your requirements
+  db_name             = "studentappdb"
+  db_username         = "admin"
+  db_password         = "admin123"
+  allocated_storage   = 20
+  engine_version      = "10.6"
+  instance_class      = "db.t3.micro"
+  skip_final_snapshot = true
+  deletion_protection = false
+}
+
 //module "route53" {
 //  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
 //
