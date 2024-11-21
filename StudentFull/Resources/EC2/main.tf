@@ -36,7 +36,7 @@ resource "aws_instance" "ubuntu_instance" {
   instance_type = var.instance_type
   subnet_id     = var.public_subnet_ids[0]
   security_groups = [
-    aws_security_group.ec2_sg.name
+    aws_security_group.ec2_sg.id
   ]
 
   tags = {
