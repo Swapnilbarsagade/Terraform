@@ -11,7 +11,7 @@ terraform {
 
 
 module "vpc" {
-  source = "/home/cloudshell-user/Studentapp_Terraform/Resources/VPC"
+  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/VPC"
 
   vpc_cidr            = "10.0.0.0/16"
   public_subnet_cidr_a = "10.0.1.0/24"
@@ -30,7 +30,7 @@ module "vpc" {
 
 
 module "ec2" {
-  source = "/home/cloudshell-user/Studentapp_Terraform/Resources/EC2"
+  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/EC2"
 
   project_name     = "my-project"
   vpc_id           = module.vpc.vpc_id
@@ -40,7 +40,7 @@ module "ec2" {
 }
 
 module "route53" {
-  source = "/home/cloudshell-user/Studentapp_Terraform/Resources/EC2"
+  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
 
   domain_name   = "swapnilbdevops.online"
   alb_dns_name  = module.ec2.alb_dns_name
