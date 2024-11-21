@@ -13,3 +13,16 @@ variable "instance_type" {
   type        = string
   default     = "t2.micro"
 }
+
+
+variable "vpc_id" {
+  description = "vpc_id"
+  type        = string
+  
+}
+
+variable "public_subnet_ids" {
+  description = "public subnet ids"
+  type        = list(string)
+  
+}

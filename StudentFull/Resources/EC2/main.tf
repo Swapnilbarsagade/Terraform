@@ -2,7 +2,7 @@
 resource "aws_security_group" "ec2_sg" {
   name        = "${var.project_name}-ec2-sg"
   description = "Allow HTTP and SSH traffic"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 22
@@ -34,7 +34,7 @@ resource "aws_security_group" "ec2_sg" {
 resource "aws_instance" "ubuntu_instance" {
   ami           = var.ubuntu_ami_id
   instance_type = var.instance_type
-  subnet_id     = aws_subnet.public_a.id
+  subnet_id     = var.public_subnet_ids[0]
   security_groups = [
     aws_security_group.ec2_sg.name
   ]
@@ -58,10 +58,7 @@ resource "aws_lb" "app_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ec2_sg.id]
-  subnets            = [
-    aws_subnet.public_a.id,
-    aws_subnet.public_b.id
-  ]
+  subnets            = var.public_subnet_ids
 
   tags = {
     Name = "${var.project_name}-alb"

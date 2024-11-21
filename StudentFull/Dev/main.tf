@@ -34,7 +34,7 @@ module "ec2" {
 
   project_name     = "my-project"
   vpc_id           = module.vpc.vpc_id
-  public_subnet_ids = module.vpc.public_subnet_ids
+  public_subnet_ids = module.vpc.public_subnets
   ubuntu_ami_id    = "ami-042e76978adeb8c48" #  AMI ID for Ubuntu
   instance_type    = "t2.micro"
 }
