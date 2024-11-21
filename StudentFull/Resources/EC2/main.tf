@@ -63,11 +63,52 @@ resource "aws_instance" "ubuntu_instance" {
 
   user_data = <<-EOF
               #!/bin/bash
-              apt-get update
-              apt-get install -y nginx
-              systemctl start nginx
-              systemctl enable nginx
-            EOF
+              # Update the system
+              apt-get update -y
+
+              # Install Java (required for Tomcat)
+              apt-get install -y openjdk-11-jdk
+
+              # Install MySQL client
+              apt-get install -y mariadb-client
+
+              # Set JAVA_HOME
+              echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/profile.d/java.sh
+              source /etc/profile.d/java.sh
+
+              # Download and install Tomcat 9.0.97
+              wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.tar.gz
+              tar xzvf apache-tomcat-9.0.97.tar.gz -C /opt
+
+              # Create a symbolic link to make Tomcat accessible
+              ln -s /opt/apache-tomcat-9.0.97 /opt/tomcat
+
+              # Set permissions
+              chown -R root:root /opt/tomcat
+
+              # Clone the Git repository that contains the student.war file
+              git clone https://github.com/Swapnilbarsagade/AWS.git /tmp/aws
+
+              # Copy the student.war file to the Tomcat webapps directory and mysql-connector.jar to lib directory
+              cp /tmp/aws/tomcat9sstudent/student.war /opt/tomcat/webapps/
+              cp /tmp/aws/tomcat9sstudent/mysql-connector.jar /opt/tomcat/lib/
+
+               # Configure the database connection
+              cat <<EOL > /opt/tomcat/conf/context.xml
+              <Context>
+                  <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+                            maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+                            username="${var.db_username}" password="${var.db_password}" driverClassName="com.mysql.jdbc.Driver"
+                            url="jdbc:mysql://${aws_db_instance.mariadb.endpoint}/${var.db_name}"/>
+              </Context>
+              EOL
+
+              # Start Tomcat using catalina.sh
+              /opt/tomcat/bin/catalina.sh stop
+              /opt/tomcat/bin/catalina.sh start
+
+              EOF
+
 }
 
 # Application Load Balancer
