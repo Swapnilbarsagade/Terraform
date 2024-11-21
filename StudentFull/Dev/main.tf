@@ -27,3 +27,22 @@ module "vpc" {
   public_rt_name       = "PublicRouteTable"
   private_rt_name      = "PrivateRouteTable"
 }
+
+
+module "ec2" {
+  source = "/home/cloudshell-user/Studentapp_Terraform/Resources/EC2"
+
+  project_name     = "my-project"
+  vpc_id           = module.vpc.vpc_id
+  public_subnet_ids = module.vpc.public_subnet_ids
+  ubuntu_ami_id    = "ami-0c02fb55956c7d316" #  AMI ID for Ubuntu
+  instance_type    = "t2.micro"
+}
+
+module "route53" {
+  source = "/home/cloudshell-user/Studentapp_Terraform/Resources/EC2"
+
+  domain_name   = "swapnilbdevops.online"
+  alb_dns_name  = module.ec2.alb_dns_name
+  alb_zone_id   = module.ec2.alb_zone_id
+}
