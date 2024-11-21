@@ -5,7 +5,7 @@ terraform {
         //dynamodb_table = "cbz"
         region = "ap-northeast-2"
         profile = "swapnil"
-        shared_credentials_files = ["/home/swapnil/.aws/credentials"]
+        shared_credentials_files = ["/home/cloudshell-user/.aws/credentials"]
     }
 }
 
