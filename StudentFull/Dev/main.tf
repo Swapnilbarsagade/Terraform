@@ -2,7 +2,7 @@ terraform {
     backend "s3" {
         bucket = "swapnil008"
         key = "terraform.tfstate"
-        dynamodb_table = "cbz"
+        //dynamodb_table = "cbz"
         region = "ap-northeast-2"
         profile = "swapnil"
         shared_credentials_files = ["/home/swapnil/.aws/credentials"]
