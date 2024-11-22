@@ -49,7 +49,7 @@ resource "aws_route53_zone" "main" {
 }
 
 
-data "aws_route53_zone" "zone" {
-  name         = var.domain_name
-  private_zone = false  # Set to true if you're using a private hosted zone
-}
+//data "aws_route53_zone" "zone" {
+  //name         = var.domain_name
+  //private_zone = false  # Set to true if you're using a private hosted zone
+//}
