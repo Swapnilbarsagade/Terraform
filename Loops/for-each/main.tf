@@ -23,12 +23,12 @@ resource "aws_iam_user" "main_user"{
 variable "main_user_name" {
     type = list(string)
    
-    default = ["ubuntu","awslinux","windows"]
+    default = ["ubuntu","awslinux","amazonlinux2"]
 }
 
 variable "imageid" {
     type = list(string)
-    default = ["ami-042e76978adeb8c48","ami-0de20b1c8590e09c5","ami-097cae9cfddb3649"]
+    default = ["ami-042e76978adeb8c48","ami-0de20b1c8590e09c5","ami-04cb1684c278156a3"]
 
 }
 
