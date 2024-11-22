@@ -30,5 +30,8 @@ variable "public_subnet_ids" {
 variable "user_data" {
   description = "The user data to provide when launching the instance."
   type        = string
-  default     = ""
+}
+
+variable "certificate_arn" {
+  description = "The ARN of the SSL certificate for the ALB"
 }

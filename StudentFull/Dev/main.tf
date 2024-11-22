@@ -37,6 +37,7 @@ module "ec2" {
   public_subnet_ids = module.vpc.public_subnets
   ubuntu_ami_id    = "ami-042e76978adeb8c48" #  AMI ID for Ubuntu
   instance_type    = "t2.micro"
+  certificate_arn   = module.route53.certificate_arn
 
   user_data = <<-EOF
               #!/bin/bash
@@ -88,10 +89,10 @@ module "rds" {
   deletion_protection = false
 }
 
-//module "route53" {
-//  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
-//
-//  domain_name   = "swapnilbdevops.online"
-//  alb_dns_name  = module.ec2.alb_dns_name
-//  alb_zone_id   = module.ec2.alb_zone_id
-//}
+module "route53" {
+  source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
+
+  domain_name   = "swapnilbdevops.online"
+  alb_dns_name  = module.ec2.alb_dns_name
+  alb_zone_id   = module.ec2.alb_zone_id
+}

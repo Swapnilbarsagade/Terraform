@@ -1,9 +1,7 @@
-variable "project_name" {
-  description = "Project Name"
-  type        = string
+variable "domain_name" {
+  description = "The domain name for the application"
 }
 
-variable "domain_name" {
-  description = "Domain name for Route53 hosted zone"
-  type        = string
+variable "route53_zone_id" {
+  description = "The Route53 hosted zone ID for the domain"
 }
