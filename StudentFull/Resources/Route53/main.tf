@@ -52,3 +52,7 @@ data "aws_route53_zone" "zone" {
   name         = var.domain_name
   private_zone = false  # Set to true if you're using a private hosted zone
 }
+
+data "aws_route53_zone" "zone" {
+  zone_id = var.route53_zone_id  # Directly refer to the specific hosted zone ID
+}
