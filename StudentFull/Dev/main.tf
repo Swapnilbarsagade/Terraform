@@ -94,13 +94,7 @@ module "route53" {
 
   domain_name   = "swapnilbdevops.online"
   project_name    = "Student"
-  route53_zone_id = data.aws_route53_zone.zone.id
   alb_dns_name    = module.ec2.alb_dns_name
   alb_zone_id     = module.ec2.alb_zone_id
 }
 
-
-data "aws_route53_zone" "zone" {
-  name         = var.domain_name
-  private_zone = false  # Set to true if you're using a private hosted zone
-}

@@ -43,3 +43,13 @@ resource "aws_route53_record" "app_dns" {
     evaluate_target_health = true
   }
 }
+
+resource "aws_route53_zone" "main" {
+  name = var.domain_name
+}
+
+
+data "aws_route53_zone" "zone" {
+  name         = var.domain_name
+  private_zone = false  # Set to true if you're using a private hosted zone
+}
