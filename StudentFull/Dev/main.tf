@@ -93,6 +93,8 @@ module "route53" {
   source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
 
   domain_name   = "swapnilbdevops.online"
-  alb_dns_name  = module.ec2.alb_dns_name
-  alb_zone_id   = module.ec2.alb_zone_id
+  project_name    = var.project_name
+  route53_zone_id = var.route53_zone_id
+  alb_dns_name    = module.ec2.alb_dns_name
+  alb_zone_id     = module.ec2.alb_zone_id
 }
