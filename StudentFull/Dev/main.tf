@@ -89,11 +89,6 @@ module "rds" {
   deletion_protection = false
 }
 
-# Fetch Hosted Zone
-data "aws_route53_zone" "zone" {
-  name         = var.domain_name
-  private_zone = false
-}
 
 module "route53" {
   source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
