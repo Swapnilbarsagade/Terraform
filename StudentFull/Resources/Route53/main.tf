@@ -18,7 +18,7 @@ resource "aws_route53_record" "acm_validation" {
     }
   }
 
-  zone_id = data.aws_route53_zone.zone.id
+  zone_id = var.route53_zone_id
   name    = each.value.name
   type    = each.value.type
   records = [each.value.record]
@@ -33,7 +33,7 @@ resource "aws_acm_certificate_validation" "ssl_cert_validation" {
 
 # Route53 Record for ALB
 resource "aws_route53_record" "app_dns" {
-  zone_id = data.aws_route53_zone.zone.id
+  zone_id = var.route53_zone_id
   name    = var.domain_name
   type    = "A"
 

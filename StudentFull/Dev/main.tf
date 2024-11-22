@@ -89,12 +89,18 @@ module "rds" {
   deletion_protection = false
 }
 
+# Fetch the Route 53 hosted zone for your domain
+data "aws_route53_zone" "zone" {
+  name         = var.domain_name
+  private_zone = false  # Ensure only public hosted zones are considered
+}
 
 module "route53" {
   source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
 
   domain_name   = "swapnilbdevops.online"
   project_name    = "Student"
+  route53_zone_id = data.aws_route53_zone.zone.id
   alb_dns_name    = module.ec2.alb_dns_name
   alb_zone_id     = module.ec2.alb_zone_id
 }
