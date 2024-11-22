@@ -89,6 +89,12 @@ module "rds" {
   deletion_protection = false
 }
 
+variable "domain_name" {
+  description = "The domain name for the Route 53 hosted zone"
+  type        = string
+  default     = "swapnilbdevops.online"
+} 
+
 # Fetch the Route 53 hosted zone for your domain
 data "aws_route53_zone" "zone" {
   name         = var.domain_name
@@ -98,7 +104,7 @@ data "aws_route53_zone" "zone" {
 module "route53" {
   source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
 
-  domain_name   = "swapnilbdevops.online"
+  domain_name   = var.domain_name
   project_name    = "Student"
   route53_zone_id = data.aws_route53_zone.zone.id
   alb_dns_name    = module.ec2.alb_dns_name
