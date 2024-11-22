@@ -93,8 +93,14 @@ module "route53" {
   source = "/home/cloudshell-user/Terraform/StudentFull/Resources/Route53"
 
   domain_name   = "swapnilbdevops.online"
-  project_name    = var.project_name
-  route53_zone_id = var.route53_zone_id
+  project_name    = "Student"
+  route53_zone_id = data.aws_route53_zone.zone.id
   alb_dns_name    = module.ec2.alb_dns_name
   alb_zone_id     = module.ec2.alb_zone_id
+}
+
+# Route 53 Hosted Zone (if you don’t already have it)
+data "aws_route53_zone" "selected_zone" {
+  name         = var.domain_name
+  private_zone = false
 }
