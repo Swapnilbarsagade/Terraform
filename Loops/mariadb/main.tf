@@ -18,3 +18,10 @@ resource "aws_db_instance" "rds_instances" {
     Environment = each.key
   }
 }
+
+output "rds_endpoints" {
+  value = {
+    for key, instance in aws_db_instance.rds_instances :
+    key => instance.endpoint
+  }
+}
