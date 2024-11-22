@@ -99,8 +99,8 @@ module "route53" {
   alb_zone_id     = module.ec2.alb_zone_id
 }
 
-# Route 53 Hosted Zone (if you don’t already have it)
-data "aws_route53_zone" "selected_zone" {
+
+data "aws_route53_zone" "zone" {
   name         = var.domain_name
-  private_zone = false
+  private_zone = false  # Set to true if you're using a private hosted zone
 }
