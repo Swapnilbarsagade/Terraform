@@ -95,7 +95,6 @@ module "route53" {
 
   domain_name   = "swapnilbdevops.online"
   project_name    = "Student"
-  route53_zone_id = data.aws_route53_zone.zone.id
   alb_dns_name    = module.ec2.alb_dns_name
   alb_zone_id     = module.ec2.alb_zone_id
 }
