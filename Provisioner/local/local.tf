@@ -15,7 +15,7 @@ provider "aws" {
       connection {
     type     = "ssh"
     user     = "ec2-user"
-    private_key = file("${path.module}/id_rsa/swapkey.pem")
+    private_key = file("${path.module}/swapkey.pem")
     host     = "${self.public_ip}"
   }
   
