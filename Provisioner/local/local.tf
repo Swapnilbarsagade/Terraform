@@ -9,18 +9,18 @@ provider "aws" {
     key_name = "swapkey"
     instance_type = "t2.micro"
      
-     provisioner "file" {
-    source      = "readme.md"
-    destination = "/home/ec2-user/readme.md"
-      connection {
-    type     = "ssh"
-    user     = "ec2-user"
-    private_key = file("${path.module}/swapkey.pem")
-    host     = "${self.public_ip}"
-  }
+    // provisioner "file" {
+    //source      = "readme.md"
+    //destination = "/home/ec2-user/readme.md"
+    //  connection {
+    //type     = "ssh"
+    //user     = "ec2-user"
+    //private_key = file("${path.module}/swapkey.pem")
+    //host     = "${self.public_ip}"
+ // }
   
   
-  }
+ // }
    provisioner "local-exec" {
     command = "echo ${self.private_ip} >> /tmp/private_ips.txt "
   }
