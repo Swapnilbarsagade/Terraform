@@ -16,7 +16,7 @@ provider "aws" {
       connection {
     type     = "ssh"
     user     = "ubuntu"
-    private_key = file("${path.module}/swapkey.pem")
+    private_key = file("${path.module}/id_rsa.pem")
     host     = "${self.public_ip}"
   }
   
