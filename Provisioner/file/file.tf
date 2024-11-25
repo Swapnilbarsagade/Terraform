@@ -14,7 +14,7 @@ provider "aws" {
       connection {
     type     = "ssh"
     user     = "ec2-user"
-    private_key = file("~/.ssh/id_rsa")
+    private_key = file("/home/cloudshell-user/Terraform/Provisioner/file/swapkey.pem")
     host     = "${self.public_ip}"
     }
   
