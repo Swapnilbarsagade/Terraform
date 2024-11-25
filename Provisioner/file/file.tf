@@ -1,5 +1,7 @@
 provider "aws" {
     region =  "ap-northeast-2"
+    access_key = ""
+    secret_key = ""
     profile = "swapnil"
 }
  resource "aws_instance" "this_aws_instance" {
@@ -14,12 +16,12 @@ provider "aws" {
       connection {
     type     = "ssh"
     user     = "ec2-user"
-    private_key = file("/home/cloudshell-user/Terraform/Provisioner/file/swapkey.pem")
+    private_key = file("${path.module}/swapkey.pem")
     host     = "${self.public_ip}"
-    }
+  }
   
   
-    }
+  }
 
 
- }
+}
