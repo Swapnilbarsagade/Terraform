@@ -7,7 +7,7 @@ provider "aws" {
  resource "aws_instance" "this_aws_instance" {
     ami = "ami-040c33c6a51fd5d96"
     vpc_security_group_ids = ["sg-012e79c059dc4b579"]
-    key_name = "id_rsa.pem"
+    key_name = "swapkey"
     instance_type = "t2.micro"
      
      provisioner "file" {
