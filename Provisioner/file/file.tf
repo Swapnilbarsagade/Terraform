@@ -4,7 +4,7 @@ provider "aws" {
 }
  resource "aws_instance" "this_aws_instance" {
     ami = "ami-0f1e61a80c7ab943e"
-    vpc_security_group_ids = ["sg-0ee8e99c42ea4a2a3"]
+    vpc_security_group_ids = ["sg-012e79c059dc4b579"]
     key_name = "swapkey"
     instance_type = "t2.micro"
      
@@ -14,7 +14,7 @@ provider "aws" {
       connection {
     type     = "ssh"
     user     = "ec2-user"
-    private_key = file("${path.module}/swapkey.pem")
+    private_key = file("~/.ssh/id_rsa")
     host     = "${self.public_ip}"
     }
   
